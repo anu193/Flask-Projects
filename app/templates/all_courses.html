@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>All Courses</h2>
+<ul class="list-group">
+    {% for course in courses %}
+    <li class="list-group-item">
+        <a href="{{ url_for('course_details', course_id=course.id) }}">{{ course.title }}</a>
+        – {{ '%.2f' | format(course.cost / 100) }} GBP
+    </li>
+    {% endfor %}
+</ul>
+{% endblock %}

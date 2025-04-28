@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% import "bootstrap_wtf.html" as wtf %}
+
+{% block content %}
+<h1>Private Account Page</h1>
+
+<p>Hello {{ current_user.username }}</p>
+
+<p>This page is only available to you as the currently logged in user</p>
+
+<p>The email address we have recorded for you is: {{ current_user.email }}</p>
+
+
+<h2>Your Enrolled Courses</h2>
+<table class="table">
+    <thead>
+        <tr><th>Course</th><th>Date Enrolled</th><th>Cancel</th></tr>
+    </thead>
+    <tbody>
+        {% for e in current_user.enrolments %}
+        <tr>
+            <td>{{ e.course.title }}</td>
+            <td>{{ e.date_enroled.strftime("%Y-%m-%d") }}</td>
+            <td>
+                <form action="{{ url_for('cancel_enrolment') }}" method="post">
+                    {{ enrol_form.hidden_tag() }}
+                    {{ enrol_form.course_id(value=e.course.id) }}
+                    {{ enrol_form.submit(class="btn btn-danger btn-sm", value="Cancel") }}
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}
+
+
+#after clicking on Enrol button im getting following error:
+ValueError: invalid literal for int() with base 10: ''
+and because of which the logged in user is unable to enroll in the cousre
