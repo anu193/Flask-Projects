@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>{{ course.title }}</h2>
+<p><strong>Description:</strong> {{ course.description }}</p>
+<p><strong>Instructor:</strong> {{ course.instructor }}</p>
+<p><strong>Cost:</strong> {{ '%.2f' | format(course.cost / 100) }} GBP</p>
+{% if course.prerequisites %}
+<p><strong>Prerequisites:</strong> {{ course.prerequisites }}</p>
+{% endif %}
+
+{% if current_user.is_authenticated %}
+<p>
+    {% if is_enrolled %}
+        You are enrolled in this course.
+    {% else %}
+        You are not enrolled in this course.
+    {% endif %}
+</p>
+
+<form action="{{ url_for('toggle_enrolment') }}" method="post">
+    {{ form.hidden_tag() }}
+    {{ form.course_id(id="course_id") }}
+    <input type="hidden" name="course_id" value="{{ course.id }}">
+    {% if is_enrolled %}
+        {{ form.submit(class="btn btn-warning", value="Unenroll") }}
+    {% else %}
+        {{ form.submit(class="btn btn-success", value="Enroll") }}
+    {% endif %}
+</form>
+{% endif %}
+{% endblock %}
+
